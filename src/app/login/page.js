@@ -1,12 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
 
 export default function LoginPage() {
-  const router = useRouter();
-
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -37,6 +34,7 @@ export default function LoginPage() {
       });
 
       const data = await res.json();
+      console.log("LOGIN RESPONSE:", data);
 
       if (!res.ok) {
         setMessage(data.message || "Login failed");
@@ -47,15 +45,16 @@ export default function LoginPage() {
       setMessage("Login successful");
 
       if (data.role === "user") {
-        router.push("/user/dashboard");
+        window.location.href = "/user/dashboard";
       } else if (data.role === "seller") {
-        router.push("/seller/dashboard");
+        window.location.href = "/seller/dashboard";
       } else if (data.role === "admin") {
-        router.push("/admin/dashboard");
+        window.location.href = "/admin/dashboard";
       } else {
-        router.push("/");
+        window.location.href = "/";
       }
     } catch (error) {
+      console.error("LOGIN PAGE ERROR:", error);
       setMessage("Something went wrong");
     } finally {
       setLoading(false);
