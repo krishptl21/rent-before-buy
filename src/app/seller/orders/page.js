@@ -24,7 +24,7 @@ export default function SellerOrdersPage() {
         } else {
           setMessage("");
         }
-      } catch (error) {
+      } catch {
         setMessage("Something went wrong");
       }
     }
@@ -36,9 +36,7 @@ export default function SellerOrdersPage() {
     <main className="min-h-screen bg-gray-100 p-8">
       <div className="mx-auto max-w-5xl rounded-xl bg-white p-8 shadow">
         <h1 className="text-3xl font-bold">Seller Orders</h1>
-        <p className="mt-2 text-gray-600">
-          Orders placed on your products
-        </p>
+        <p className="mt-2 text-gray-600">Orders placed on your products</p>
 
         {message && <p className="mt-6 text-gray-700">{message}</p>}
 
@@ -55,6 +53,9 @@ export default function SellerOrdersPage() {
               <p>Total Amount: ₹{order.totalAmount}</p>
               <p>Deposit Amount: ₹{order.depositAmount}</p>
               <p>Rental Days: {order.rentalDays}</p>
+              <p>Payment Method: {order.paymentMethod}</p>
+              <p>Payment Status: {order.paymentStatus}</p>
+              <p>Transaction ID: {order.transactionId || "N/A"}</p>
             </div>
           ))}
         </div>

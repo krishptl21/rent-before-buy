@@ -34,7 +34,6 @@ export default function LoginPage() {
       });
 
       const data = await res.json();
-      console.log("LOGIN RESPONSE:", data);
 
       if (!res.ok) {
         setMessage(data.message || "Login failed");
@@ -44,17 +43,18 @@ export default function LoginPage() {
 
       setMessage("Login successful");
 
-      if (data.role === "user") {
-        window.location.href = "/user/dashboard";
-      } else if (data.role === "seller") {
-        window.location.href = "/seller/dashboard";
-      } else if (data.role === "admin") {
-        window.location.href = "/admin/dashboard";
-      } else {
-        window.location.href = "/";
-      }
-    } catch (error) {
-      console.error("LOGIN PAGE ERROR:", error);
+      setTimeout(() => {
+        if (data.role === "user") {
+          window.location.replace("/user/dashboard");
+        } else if (data.role === "seller") {
+          window.location.replace("/seller/dashboard");
+        } else if (data.role === "admin") {
+          window.location.replace("/admin/dashboard");
+        } else {
+          window.location.replace("/");
+        }
+      }, 300);
+    } catch {
       setMessage("Something went wrong");
     } finally {
       setLoading(false);
@@ -65,9 +65,7 @@ export default function LoginPage() {
     <main className="min-h-screen bg-gray-100 p-8">
       <div className="mx-auto max-w-md rounded-xl bg-white p-8 shadow">
         <h1 className="text-2xl font-bold">Login</h1>
-        <p className="mt-2 text-gray-600">
-          Login as user, seller, or admin
-        </p>
+        <p className="mt-2 text-gray-600">Login as user, seller, or admin</p>
 
         <form onSubmit={handleSubmit} className="mt-6 space-y-4">
           <input

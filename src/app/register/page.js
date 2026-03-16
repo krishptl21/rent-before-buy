@@ -50,7 +50,7 @@ export default function RegisterPage() {
       setMessage(data.message || "Registered successfully");
 
       setTimeout(() => {
-        window.location.href = "/login";
+        window.location.replace = "/login";
       }, 1200);
     } catch (error) {
       setMessage("Something went wrong");

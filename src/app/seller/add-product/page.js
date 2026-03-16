@@ -32,6 +32,20 @@ export default function AddProductPage() {
     }));
   }
 
+  function handleImageUpload(e) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setFormData((prev) => ({
+        ...prev,
+        image: reader.result,
+      }));
+    };
+    reader.readAsDataURL(file);
+  }
+
   async function handleSubmit(e) {
     e.preventDefault();
     setLoading(true);
@@ -57,9 +71,9 @@ export default function AddProductPage() {
       setMessage("Product added successfully");
 
       setTimeout(() => {
-        router.push("/seller/my-products");
-      }, 1000);
-    } catch (error) {
+        window.location.replace("/seller/my-products");
+      }, 800);
+    } catch {
       setMessage("Something went wrong");
     } finally {
       setLoading(false);
@@ -70,9 +84,7 @@ export default function AddProductPage() {
     <main className="min-h-screen bg-gray-100 p-8">
       <div className="mx-auto max-w-2xl rounded-xl bg-white p-8 shadow">
         <h1 className="text-3xl font-bold">Add Product</h1>
-        <p className="mt-2 text-gray-600">
-          Add a new product for rent or buy
-        </p>
+        <p className="mt-2 text-gray-600">Add a new product for rent or buy</p>
 
         <form onSubmit={handleSubmit} className="mt-6 space-y-4">
           <input
@@ -95,14 +107,25 @@ export default function AddProductPage() {
             required
           />
 
-          <input
-            type="text"
-            name="image"
-            placeholder="Image URL"
-            value={formData.image}
-            onChange={handleChange}
-            className="w-full rounded-lg border p-3"
-          />
+          <div>
+            <label className="mb-2 block text-sm font-medium">
+              Upload Product Image
+            </label>
+            <input
+              type="file"
+              accept="image/*"
+              onChange={handleImageUpload}
+              className="w-full rounded-lg border p-3"
+            />
+          </div>
+
+          {formData.image && (
+            <img
+              src={formData.image}
+              alt="Preview"
+              className="h-48 w-full rounded-lg object-cover"
+            />
+          )}
 
           <input
             type="text"

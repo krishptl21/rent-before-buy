@@ -23,7 +23,7 @@ export async function POST(req) {
     }
 
     const body = await req.json();
-    const { productId, type, rentalDays } = body;
+    const { productId, type, rentalDays, paymentMethod } = body;
 
     if (!productId || !type) {
       return NextResponse.json(
@@ -35,6 +35,13 @@ export async function POST(req) {
     if (!["rent", "buy"].includes(type)) {
       return NextResponse.json(
         { success: false, message: "Invalid order type" },
+        { status: 400 }
+      );
+    }
+
+    if (!["demo-online", "cash-on-delivery"].includes(paymentMethod)) {
+      return NextResponse.json(
+        { success: false, message: "Invalid payment method" },
         { status: 400 }
       );
     }
@@ -97,6 +104,12 @@ export async function POST(req) {
       status = "purchased";
     }
 
+    const paymentStatus =
+      paymentMethod === "demo-online" ? "paid" : "pending";
+
+    const transactionId =
+      paymentMethod === "demo-online" ? `DEMO-${Date.now()}` : "";
+
     const order = await Order.create({
       userId: user.id,
       productId: product._id,
@@ -105,6 +118,9 @@ export async function POST(req) {
       rentalDays: finalRentalDays,
       totalAmount,
       depositAmount,
+      paymentMethod,
+      paymentStatus,
+      transactionId,
       status,
     });
 
